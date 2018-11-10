@@ -12,6 +12,8 @@ class App extends React.Component {
     constructor (props) {
         super(props);
 
+        alert(1)
+
         this.state = {
             activePanel: 'home',
             fetchedUser: null,
@@ -23,37 +25,38 @@ class App extends React.Component {
 
     componentDidMount () {
 
+        alert(2)
+
         // Запросим информацию по текущему пользователю
         connect.getUserInfo(data => {
             this.setState({fetchedUser: data});
         });
 
         // Получим список событий
-        server.getEvents().then(response => {
-            response.json().then(events => {
-                this.setState({serverEvents: events})
-                // Запросим информацию о группах событий
-                connect.getGroupsById(events.map(event => event.eventId), data => {
-                    const events = data.response.map(vkEvent => {
-                        const event = this.state.serverEvents.find(e => e.eventId === vkEvent.screen_name);
-                        return {group: vkEvent, ...event, guests: []}
-                    });
-                    this.setState({events});
+        server.getEvents().then(events => {
+            alert(JSON.stringify(events))
+            this.setState({serverEvents: events});
+            // Запросим информацию о группах событий
+            connect.getGroupsById(events.map(event => event.eventId), data => {
+                const events = data.response.map(vkEvent => {
+                    const event = this.state.serverEvents.find(e => e.eventId === vkEvent.screen_name);
+                    return {group: vkEvent, ...event, guests: []}
+                });
+                this.setState({events});
 
-                    // Объединим все массивы пользователей, купивших билеты на мероприятия, и запросим информацию сразу о всех
-                    const profileIds = [...new Set(this.state.serverEvents.reduce((s, e) => s.concat(e.guests), []))];
-                    connect.getProfilesById(profileIds, data => {
-                        const profiles = data.response;
-                        const events1 = this.state.events.map(event => {
-                            const serverEvent = this.state.serverEvents.find(serverEvent => serverEvent.eventId === event.eventId);
-                            return {
-                                ...event,
-                                guests: serverEvent.guests.map(guest => profiles.find(profile => profile.id.toString() === guest))
-                            }
-                        })
-                        this.setState({
-                            events: events1
-                        })
+                // Объединим все массивы пользователей, купивших билеты на мероприятия, и запросим информацию сразу о всех
+                const profileIds = [...new Set(this.state.serverEvents.reduce((s, e) => s.concat(e.guests), []))];
+                connect.getProfilesById(profileIds, data => {
+                    const profiles = data.response;
+                    const events1 = this.state.events.map(event => {
+                        const serverEvent = this.state.serverEvents.find(serverEvent => serverEvent.eventId === event.eventId);
+                        return {
+                            ...event,
+                            guests: serverEvent.guests.map(guest => profiles.find(profile => profile.id.toString() === guest))
+                        }
+                    })
+                    this.setState({
+                        events: events1
                     })
                 })
             })
