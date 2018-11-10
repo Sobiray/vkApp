@@ -6,7 +6,7 @@ import server from './service/server'
 import {Settings} from './settings';
 
 import Home from './panels/Home';
-import Persik from './panels/Persik';
+import Event from './panels/Event';
 import AddEvent from './panels/AddEvent';
 
 class App extends React.Component {
@@ -17,7 +17,8 @@ class App extends React.Component {
             activePanel: 'home',
             fetchedUser: null,
             serverEvents: [],
-            events: []
+            events: [],
+            selectedEvent: null
         };
     }
 
@@ -35,6 +36,7 @@ class App extends React.Component {
                         return {info: vkEvent, ...event}
                     })
                     this.setState({events});
+                    //alert(JSON.stringify(events))
                     break;
                 }
                 default:
@@ -59,27 +61,26 @@ class App extends React.Component {
         })
     }
 
-    go = (e) => {
-        this.setState({activePanel: e.currentTarget.dataset.to})
-    };
+    goToEvent = (event) => {
+        this.setState({selectedEvent: event})
+        this.setState({activePanel: "event"})
+    }
 
-    goToAddEvent = (e) => {
+    go = (e) => {
         this.setState({activePanel: e.currentTarget.dataset.to})
     }
 
     render () {
         return (
-            <View>
-                <View activePanel={this.state.activePanel}>
-                    <Home
-                        id="home"
-                        events={this.state.events}
-                        fetchedUser={this.state.fetchedUser}
-                        go={this.go}
-                        goToAddEvent={this.goToAddEvent}/>
-                    <Persik id="persik" go={this.go}/>
-                    <AddEvent id="addEvent" go={this.goToAddEvent}/>
-                </View>
+            <View activePanel={this.state.activePanel}>
+                <Home
+                    id="home"
+                    events={this.state.events}
+                    fetchedUser={this.state.fetchedUser}
+                    go={this.go}
+                    goToEvent={this.goToEvent}/>
+                <Event id="event" event={this.state.selectedEvent} go={this.go}/>
+                <AddEvent id="addEvent" go={this.go}/>
             </View>
         );
     }
