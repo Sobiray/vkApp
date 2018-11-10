@@ -39,6 +39,14 @@ class App extends React.Component {
                     //alert(JSON.stringify(events))
                     break;
                 }
+                case 'VKWebAppOpenPayFormResult': {
+                    alert(JSON.stringify(e.detail))
+                    break;
+                }
+                case 'VKWebAppOpenPayFormFailed': {
+                    alert(JSON.stringify(e.detail))
+                    break;
+                }
                 default:
                 	console.log(e.detail);
             }
