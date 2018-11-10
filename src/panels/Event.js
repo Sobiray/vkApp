@@ -15,7 +15,7 @@ class Event extends React.Component {
         connect.makePayment(props.event, data => {
             server.savePayment(
                 props.fetchedUser.id,
-                props.event.id,
+                props.event.eventId,
                 data.transaction_id)
         })
     };
@@ -45,19 +45,22 @@ class Event extends React.Component {
                 <Group title="Информация о событии">
                     <List>
                         <Cell>
-                            <InfoRow title="Цена предзаказа">{props.event.preorderPrice}</InfoRow>
+                            <InfoRow title="Цена предзаказа">{props.event.presalePrice}</InfoRow>
                         </Cell>
                         <Cell>
-                            <InfoRow title="Обычная цена">{props.event.price}</InfoRow>
+                            <InfoRow title="Обычная цена">{props.event.salePrice}</InfoRow>
                         </Cell>
                         <Cell>
-                            <InfoRow title="Хотим собрать деньги до">{props.event.deadline}</InfoRow>
+                            <InfoRow title="Хотим собрать деньги до">{props.event.fundingDeadline}</InfoRow>
                         </Cell>
                         <Cell>
-                            <InfoRow title="Целевая сумма">{props.event.requiredMoney}</InfoRow>
+                            <InfoRow title="Целевая сумма">{props.event.successSum}</InfoRow>
                         </Cell>
                         <Cell>
-                            <InfoRow title="Дата события">{props.event.date}</InfoRow>
+                            <InfoRow title="Дата события">{props.event.eventDate}</InfoRow>
+                        </Cell>
+                        <Cell>
+                            <InfoRow title="Максимальное число участников">{props.event.maxGuestsCount}</InfoRow>
                         </Cell>
                     </List>
                 </Group>

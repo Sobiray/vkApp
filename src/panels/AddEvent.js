@@ -46,31 +46,37 @@ class AddEvent extends React.Component {
                         <Div>Цена, по которой гости смогут купить билет в период предзаказа</Div>
                         <Input
                             type="text" placeholder="Цена предзаказа в рублях"
-                            onChange={val => this.setState({event: {...event, preorderPrice: val}})}/>
+                            onChange={val => this.setState({event: {...event, presalePrice: val}})}/>
                     </FormLayoutGroup>
                     <FormLayoutGroup>
                         <Div>Цена, по которой гости смогут купить билет после окончания сбора минимально необходимой суммы</Div>
                         <Input
                             type="text" placeholder="Цена в рублях"
-                            onChange={val => this.setState({event: {...event, price: val}})}/>
+                            onChange={val => this.setState({event: {...event, salePrice: val}})}/>
                     </FormLayoutGroup>
                     <FormLayoutGroup>
                         <Div>Дата, до которой требуется собрать минимальную сумму</Div>
                         <Input
                             type="text" placeholder="ДД.ММ.ГГГГ"
-                            onChange={val => this.setState({event: {...event, deadline: val}})}/>
+                            onChange={val => this.setState({event: {...event, fundingDeadline: val}})}/>
                     </FormLayoutGroup>
                     <FormLayoutGroup>
                         <Div>Минимальная сумма, которая потребуется для организации</Div>
                         <Input
                             type="text" placeholder="Сумма в рублях"
-                            onChange={val => this.setState({event: {...event, requiredMoney: val}})}/>
+                            onChange={val => this.setState({event: {...event, successSum: val}})}/>
                     </FormLayoutGroup>
                     <FormLayoutGroup>
                         <Div>Плановая дата события</Div>
                         <Input
                             type="text" placeholder="ДД.ММ.ГГГГ"
-                            onChange={val => this.setState({event: {...event, date: val}})}/>
+                            onChange={val => this.setState({event: {...event, eventDate: val}})}/>
+                    </FormLayoutGroup>
+                    <FormLayoutGroup>
+                        <Div>Максимальное число участников</Div>
+                        <Input
+                            type="text" placeholder="Количество человек"
+                            onChange={val => this.setState({event: {...event, maxGuestsCount: val}})}/>
                     </FormLayoutGroup>
                     <Button size="xl" level="2" onClick={this.save}>
                         Сохранить

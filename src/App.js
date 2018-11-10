@@ -33,9 +33,9 @@ class App extends React.Component {
             response.json().then(events => {
                 this.setState({serverEvents: events})
                 // Запросим информацию о группах событий
-                connect.getGroupsById(events.map(event => event.id), data => {
+                connect.getGroupsById(events.map(event => event.eventId), data => {
                     const events = data.response.map(vkEvent => {
-                        const event = this.state.serverEvents.find(e => e.id === vkEvent.screen_name);
+                        const event = this.state.serverEvents.find(e => e.eventId === vkEvent.screen_name);
                         return {group: vkEvent, ...event, guests: []}
                     });
                     this.setState({events});
@@ -45,7 +45,7 @@ class App extends React.Component {
                     connect.getProfilesById(profileIds, data => {
                         const profiles = data.response;
                         const events1 = this.state.events.map(event => {
-                            const serverEvent = this.state.serverEvents.find(serverEvent => serverEvent.id === event.id);
+                            const serverEvent = this.state.serverEvents.find(serverEvent => serverEvent.eventId === event.eventId);
                             return {
                                 ...event,
                                 guests: serverEvent.guests.map(guest => profiles.find(profile => profile.id.toString() === guest))
