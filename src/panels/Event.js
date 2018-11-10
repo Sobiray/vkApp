@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from '../service/connect';
 import {Avatar, CellButton, Cell, Group, InfoRow, Link, List, ListItem, Panel, PanelHeader, HeaderButton, platform, IOS} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
-import connect from '@vkontakte/vkui-connect';
-import {Settings} from '../settings'
+import server from '../service/server'
 
 const osname = platform();
 
@@ -15,17 +15,14 @@ class Event extends React.Component {
     }
 
     save = () => {
-        const event = this.props.event
-        connect.send("VKWebAppOpenPayForm", {
-            app_id: 6747605,
-            action: "pay-to-group",
-            params: {
-                amount: 1,
-                description: 'Оплата билета для',
-                group_id: 173788251
-            }
-        });
-    }
+        const props = this.props;
+        connect.makePayment(props.event, data => {
+            server.savePayment(
+                props.fetchedUser.id,
+                props.event.id,
+                data.transaction_id)
+        })
+    };
 
     render() {
         const props = this.props;
@@ -87,6 +84,7 @@ class Event extends React.Component {
 Event.propTypes = {
     id: PropTypes.string.isRequired,
     event: PropTypes.object.isRequired,
+    fetchedUser: PropTypes.object.isRequired,
     go: PropTypes.func.isRequired,
 };
 
