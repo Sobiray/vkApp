@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Cell, Div, Input, FormLayout, FormLayoutGroup, Group, Panel, PanelHeader, HeaderButton, platform, IOS} from '@vkontakte/vkui';
+import {Button, Div, Input, FormLayout, FormLayoutGroup, Panel, PanelHeader, HeaderButton, platform, IOS} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
-import server from '../service/server'
 
 const osname = platform();
 

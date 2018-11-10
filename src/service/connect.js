@@ -14,9 +14,10 @@ export const connect = {
             {
                 method: "groups.getById",
                 params: {
-                    "group_ids": group_ids,
-                    "v": Settings.VK_API_VERSION,
-                    "access_token": Settings.APP_ACCESS_TOKEN
+                    group_ids: group_ids,
+                    fields: 'place,description',
+                    v: Settings.VK_API_VERSION,
+                    access_token: Settings.APP_ACCESS_TOKEN
                 },
                 request_id: "groups.getById"
             }

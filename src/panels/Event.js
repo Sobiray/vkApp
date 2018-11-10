@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from '../service/connect';
-import {Avatar, CellButton, Cell, Group, InfoRow, Link, List, ListItem, Panel, PanelHeader, HeaderButton, platform, IOS} from '@vkontakte/vkui';
+import {Avatar, CellButton, Cell, Div, Group, InfoRow, Link, List, ListItem, Panel, PanelHeader, HeaderButton, platform, IOS} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import server from '../service/server'
@@ -9,10 +9,6 @@ import server from '../service/server'
 const osname = platform();
 
 class Event extends React.Component {
-
-    constructor (props) {
-        super(props);
-    }
 
     save = () => {
         const props = this.props;
@@ -26,6 +22,7 @@ class Event extends React.Component {
 
     render() {
         const props = this.props;
+        //alert(JSON.stringify(props.event))
         return (
             <Panel id={props.id}>
                 <PanelHeader
@@ -33,12 +30,15 @@ class Event extends React.Component {
                         {osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
                     </HeaderButton>}
                 >
-                    {props.event.info.name}
+                    Событие
                 </PanelHeader>
                 <Group>
                     <Cell
                         before={<Avatar src={props.event.info.photo_100} style={{width: 100}}/>}
-                    >
+                        description={props.event.info.place}
+                    >{props.event.info.name}</Cell>
+                    <Div>{props.event.info.description}</Div>
+                    <Cell>
                         <Link href={'https://vk.com/' + props.event.info.screen_name}>Перейти к группе</Link>
                     </Cell>
                 </Group>

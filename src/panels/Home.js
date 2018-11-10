@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Cell, List, Panel, ListItem, Button, Group, Div, Avatar, PanelHeader, Search} from '@vkontakte/vkui';
+import {Cell, List, Panel, Button, Group, Div, Avatar, PanelHeader, Search} from '@vkontakte/vkui';
 import '../css/style.css'
 
 class Home extends React.Component {

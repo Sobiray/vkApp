@@ -34,6 +34,7 @@ class App extends React.Component {
                 this.setState({serverEvents: events})
                 // Запросим информацию о группах событий
                 connect.getGroupsById(events.map(event => event.id), data => {
+                    //alert(JSON.stringify(data))
                     const events = data.response.map(vkEvent => {
                         const event = this.state.serverEvents.find(e => e.id === vkEvent.screen_name);
                         return {info: vkEvent, ...event, guests: []}
@@ -49,7 +50,7 @@ class App extends React.Component {
                                 const serverEvent = this.state.serverEvents.find(serverEvent => serverEvent.id === event.id);
                                 return {
                                     ...event,
-                                    guests: serverEvent.guests.map(guest => profiles.find(profile => profile.id == guest))
+                                    guests: serverEvent.guests.map(guest => profiles.find(profile => profile.id.toString() === guest))
                                 }
                             })
                         })
