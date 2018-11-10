@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, CellButton, Cell, Group, InfoRow, Link, List, Panel, PanelHeader, HeaderButton, platform, IOS} from '@vkontakte/vkui';
+import {Avatar, CellButton, Cell, Group, InfoRow, Link, List, ListItem, Panel, PanelHeader, HeaderButton, platform, IOS} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import connect from '@vkontakte/vkui-connect';
@@ -66,6 +66,18 @@ class Event extends React.Component {
                 </Group>
                 <Group>
                     <CellButton onClick={this.save}>Хочу пойти!</CellButton>
+                </Group>
+                <Group title="Уже идут">
+                    {
+                        props.event.guests.map(guest => (
+                            <ListItem
+                                before={<Avatar src={guest.photo_50}/>}
+                                description={guest.city.title}
+                            >
+                                {`${guest.first_name} ${guest.last_name}`}
+                            </ListItem>
+                        ))
+                    }
                 </Group>
             </Panel>
         );

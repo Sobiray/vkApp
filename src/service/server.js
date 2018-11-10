@@ -7,5 +7,15 @@ export default {
             method: 'PUT',
             body: JSON.stringify(event)
         })
+    },
+    savePayment: (userId, eventId, transactionId) => {
+        return fetch('http://demo4492577.mockable.io/payment', {
+            method: 'PUT',
+            body: JSON.stringify({
+                userId,
+                eventId,
+                transactionId
+            })
+        })
     }
 }

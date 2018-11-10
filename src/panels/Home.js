@@ -27,15 +27,6 @@ class Home extends React.Component {
         return (
             <Panel id={props.id}>
                 <PanelHeader>Мероприятия</PanelHeader>
-                {props.fetchedUser &&
-                <Group title="User Data Fetched with VK Connect">
-                    <ListItem
-                        before={<Avatar src={props.fetchedUser.photo_200}/>}
-                        description={props.fetchedUser.city.title}
-                    >
-                        {`${props.fetchedUser.first_name} ${props.fetchedUser.last_name}`}
-                    </ListItem>
-                </Group>}
 
                 <Search value={this.state.search} onChange={this.onChange} style={{color: 'white'}}/>
                 <Group>
