@@ -34,10 +34,9 @@ class App extends React.Component {
                 this.setState({serverEvents: events})
                 // Запросим информацию о группах событий
                 connect.getGroupsById(events.map(event => event.id), data => {
-                    //alert(JSON.stringify(data))
                     const events = data.response.map(vkEvent => {
                         const event = this.state.serverEvents.find(e => e.id === vkEvent.screen_name);
-                        return {info: vkEvent, ...event, guests: []}
+                        return {group: vkEvent, ...event, guests: []}
                     });
                     this.setState({events});
 
@@ -45,14 +44,15 @@ class App extends React.Component {
                     const profileIds = [...new Set(this.state.serverEvents.reduce((s, e) => s.concat(e.guests), []))];
                     connect.getProfilesById(profileIds, data => {
                         const profiles = data.response;
+                        const events1 = this.state.events.map(event => {
+                            const serverEvent = this.state.serverEvents.find(serverEvent => serverEvent.id === event.id);
+                            return {
+                                ...event,
+                                guests: serverEvent.guests.map(guest => profiles.find(profile => profile.id.toString() === guest))
+                            }
+                        })
                         this.setState({
-                            events: this.state.events.map(event => {
-                                const serverEvent = this.state.serverEvents.find(serverEvent => serverEvent.id === event.id);
-                                return {
-                                    ...event,
-                                    guests: serverEvent.guests.map(guest => profiles.find(profile => profile.id.toString() === guest))
-                                }
-                            })
+                            events: events1
                         })
                     })
                 })

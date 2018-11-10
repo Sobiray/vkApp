@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Cell, List, Panel, Button, Group, Div, Avatar, PanelHeader, Search} from '@vkontakte/vkui';
+import {Avatar, Cell, CellButton, List, Panel, Button, Group, Div, FormLayout, option, PanelHeader, Search, Select} from '@vkontakte/vkui';
 import '../css/style.css'
 
 class Home extends React.Component {
@@ -8,37 +8,77 @@ class Home extends React.Component {
         super(props);
 
         this.state = {
+            showFilters: false,
+            category: '',
             search: ''
+            //filters: {
+            //    search: '',
+            //    category: null
+            //}
         };
-
-        //alert(JSON.stringify(props.events))
-        //alert(JSON.stringify(this.state.filteredEvents))
     }
 
     onChange = (search) => {
         this.setState({ search });
     }
 
+    toggleFilters = () => {
+        this.setState({showFilters: !this.state.showFilters})
+    }
+
+    renderFilters = () => {
+        return (
+            <Group>
+                <FormLayout>
+                    <Select placeholder="Выберите категорию"
+                            onChange={e => {this.setState({category: e.nativeEvent.target.value})}}
+                            >
+                        <option value="Музыка">Музыка</option>
+                        <option value="Выставки">Выставки</option>
+                        <option value="Танцы">Танцы</option>
+                        <option value="Мастер-классы">Мастер-классы</option>
+                    </Select>
+                </FormLayout>
+            </Group>
+
+        )
+    }
+
     render() {
         const props = this.props
-        const filteredEvents = props.events.filter(event => {
-            return event.info.name.indexOf(this.state.search) > -1
-        })
+        const state = this.state
+        //alert(JSON.stringify(props.events))
+        let filteredEvents = props.events;
+        if (state.showFilters && state.search) {
+            filteredEvents = filteredEvents.filter(event => {
+                return event.group.name.indexOf(state.search) > -1
+            })
+        }
+        if (state.showFilters && state.category) {
+            filteredEvents = filteredEvents.filter(event => {
+                return event.group.description.indexOf(state.category) > -1
+            })
+        }
         return (
             <Panel id={props.id}>
                 <PanelHeader>Мероприятия</PanelHeader>
-
                 <Search value={this.state.search} onChange={this.onChange} style={{color: 'white'}}/>
+                <Group>
+                    <CellButton onClick={this.toggleFilters}>Фильтры</CellButton>
+                </Group>
+                {
+                    state.showFilters && this.renderFilters()
+                }
                 <Group>
                     <List>
                         {
                             filteredEvents.map(event => {
                                 return (
                                     <Cell
-                                        before={<Avatar src={event.info.photo_50}/>}
+                                        before={<Avatar src={event.group.photo_50}/>}
                                         onClick={() => props.goToEvent(event)}
                                     >
-                                        {event.info.name}
+                                        {event.group.name}
                                     </Cell>)
                             })
                         }

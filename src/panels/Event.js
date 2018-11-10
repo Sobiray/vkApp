@@ -34,12 +34,12 @@ class Event extends React.Component {
                 </PanelHeader>
                 <Group>
                     <Cell
-                        before={<Avatar src={props.event.info.photo_100} style={{width: 100}}/>}
-                        description={props.event.info.place}
-                    >{props.event.info.name}</Cell>
-                    <Div>{props.event.info.description}</Div>
+                        before={<Avatar src={props.event.group.photo_100} style={{width: 100}}/>}
+                        description={props.event.group.place && props.event.group.place.title}
+                    >{props.event.group.name}</Cell>
+                    <Div>{props.event.group.description}</Div>
                     <Cell>
-                        <Link href={'https://vk.com/' + props.event.info.screen_name}>Перейти к группе</Link>
+                        <Link href={'https://vk.com/' + props.event.group.screen_name}>Перейти к группе</Link>
                     </Cell>
                 </Group>
                 <Group title="Информация о событии">
