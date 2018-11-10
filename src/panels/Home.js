@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Button, Group, Div, Avatar, PanelHeader } from '@vkontakte/vkui';
+import { CellButton, Panel, ListItem, Button, Group, Div, Avatar, PanelHeader } from '@vkontakte/vkui';
+import '../css/style.css'
 
 const Home = props => (
 	<Panel id={props.id}>
@@ -15,12 +16,15 @@ const Home = props => (
 			</ListItem>
 		</Group>}
 
-		<Group title="Navigation Example">
-			<Div>
-				<Button size="xl" level="2" onClick={props.go} data-to="persik">
-					Show me the Persik, please 1
-				</Button>
-			</Div>
+		<Group title="Мероприятия" className="homePanelGroup">
+			{
+				props.events.map(event => {
+                    return (<CellButton onClick={() => {
+                    }}>
+                        {event.info.name}
+                    </CellButton>)
+                })
+			}
             <Div>
                 <Button size="xl" level="2" onClick={props.goToAddEvent} data-to="addEvent">
                     Добавить мероприятие
@@ -32,6 +36,7 @@ const Home = props => (
 
 Home.propTypes = {
 	id: PropTypes.string.isRequired,
+	events: PropTypes.object.isRequired,
 	go: PropTypes.func.isRequired,
     goToAddEvent: PropTypes.func.isRequired,
 	fetchedUser: PropTypes.shape({
