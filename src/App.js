@@ -61,13 +61,17 @@ class App extends React.Component {
         })
     }
 
+    go = (e) => {
+        this.setState({activePanel: e.currentTarget.dataset.to})
+    }
+
+    goHome = () => {
+        this.setState({activePanel: 'home'})
+    }
+
     goToEvent = (event) => {
         this.setState({selectedEvent: event})
         this.setState({activePanel: "event"})
-    }
-
-    go = (e) => {
-        this.setState({activePanel: e.currentTarget.dataset.to})
     }
 
     render () {
@@ -80,7 +84,7 @@ class App extends React.Component {
                     go={this.go}
                     goToEvent={this.goToEvent}/>
                 <Event id="event" event={this.state.selectedEvent} go={this.go}/>
-                <AddEvent id="addEvent" go={this.go}/>
+                <AddEvent id="addEvent" go={this.go} goHome={this.goHome}/>
             </View>
         );
     }
