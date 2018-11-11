@@ -57,7 +57,7 @@ class AddEvent extends React.Component {
                     <FormLayoutGroup>
                         <Div>Дата, до которой требуется собрать минимальную сумму</Div>
                         <Input
-                            type="text" placeholder="ДД.ММ.ГГГГ"
+                            type="text" placeholder="ГГГГ-ММ-ДД"
                             onChange={val => this.setState({event: {...event, fundingDeadline: val}})}/>
                     </FormLayoutGroup>
                     <FormLayoutGroup>
@@ -69,7 +69,7 @@ class AddEvent extends React.Component {
                     <FormLayoutGroup>
                         <Div>Плановая дата события</Div>
                         <Input
-                            type="text" placeholder="ДД.ММ.ГГГГ"
+                            type="text" placeholder="ГГГГ-ММ-ДД"
                             onChange={val => this.setState({event: {...event, eventDate: val}})}/>
                     </FormLayoutGroup>
                     <FormLayoutGroup>

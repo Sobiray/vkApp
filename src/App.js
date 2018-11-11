@@ -12,8 +12,6 @@ class App extends React.Component {
     constructor (props) {
         super(props);
 
-        alert(1)
-
         this.state = {
             activePanel: 'home',
             fetchedUser: null,
@@ -25,16 +23,14 @@ class App extends React.Component {
 
     componentDidMount () {
 
-        alert(2)
-
         // Запросим информацию по текущему пользователю
         connect.getUserInfo(data => {
             this.setState({fetchedUser: data});
         });
 
         // Получим список событий
-        server.getEvents().then(events => {
-            alert(JSON.stringify(events))
+        server.getEvents().then(eventsStr => {
+            const events = JSON.parse(eventsStr)
             this.setState({serverEvents: events});
             // Запросим информацию о группах событий
             connect.getGroupsById(events.map(event => event.eventId), data => {
@@ -60,6 +56,13 @@ class App extends React.Component {
                     })
                 })
             })
+        }).catch(err => {
+            alert('error')
+            alert(err)
+            //alert(JSON.stringify(Object.keys(err)))
+            //err.text().then(msg => {
+            //    alert(JSON.stringify(msg))
+            //})
         })
     }
 

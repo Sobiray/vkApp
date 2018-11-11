@@ -72,7 +72,7 @@ class Event extends React.Component {
                         props.event.guests.map(guest => (
                             <ListItem
                                 before={<Avatar src={guest.photo_50}/>}
-                                description={guest.city.title}
+                                description={guest.city && guest.city.title}
                             >
                                 {`${guest.first_name} ${guest.last_name}`}
                             </ListItem>
