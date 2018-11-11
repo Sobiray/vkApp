@@ -1,6 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, Cell, CellButton, List, Panel, Button, Group, Div, FormLayout, option, PanelHeader, Search, Select} from '@vkontakte/vkui';
+import {
+    Avatar,
+    Cell,
+    CellButton,
+    List,
+    Panel,
+    Button,
+    Group,
+    Div,
+    FormLayout,
+    option,
+    PanelHeader,
+    Search,
+    Select,
+    Spinner
+} from '@vkontakte/vkui';
 import '../css/style.css'
 
 class Home extends React.Component {
@@ -10,7 +25,7 @@ class Home extends React.Component {
         this.state = {
             showFilters: false,
             category: '',
-            search: ''
+            search: '',
             //filters: {
             //    search: '',
             //    category: null
@@ -19,7 +34,7 @@ class Home extends React.Component {
     }
 
     onChange = (search) => {
-        this.setState({ search });
+        this.setState({search});
     }
 
     toggleFilters = () => {
@@ -31,8 +46,10 @@ class Home extends React.Component {
             <Group>
                 <FormLayout>
                     <Select placeholder="Выберите категорию"
-                            onChange={e => {this.setState({category: e.nativeEvent.target.value})}}
-                            >
+                            onChange={e => {
+                                this.setState({category: e.nativeEvent.target.value})
+                            }}
+                    >
                         <option value="Музыка">Музыка</option>
                         <option value="Выставки">Выставки</option>
                         <option value="Танцы">Танцы</option>
@@ -44,7 +61,7 @@ class Home extends React.Component {
         )
     }
 
-    render() {
+    render () {
         const props = this.props
         const state = this.state
         //alert(JSON.stringify(props.events))
@@ -56,7 +73,8 @@ class Home extends React.Component {
         }
         if (state.showFilters && state.category) {
             filteredEvents = filteredEvents.filter(event => {
-                return event.group.description.indexOf(state.category) > -1
+                return event.group.description.indexOf(state.category) > -1 ||
+                    event.group.name.indexOf(state.category) > -1
             })
         }
         return (
@@ -72,15 +90,17 @@ class Home extends React.Component {
                 <Group>
                     <List>
                         {
-                            filteredEvents.map(event => {
-                                return (
-                                    <Cell
-                                        before={<Avatar src={event.group.photo_50}/>}
-                                        onClick={() => props.goToEvent(event)}
-                                    >
-                                        {event.group.name}
-                                    </Cell>)
-                            })
+                            this.props.loading
+                                ? <Spinner/>
+                                : filteredEvents.map(event => {
+                                    return (
+                                        <Cell
+                                            before={<Avatar src={event.group.photo_50}/>}
+                                            onClick={() => props.goToEvent(event)}
+                                        >
+                                            {event.group.name}
+                                        </Cell>)
+                                })
                         }
                     </List>
                     <Div>
@@ -107,6 +127,7 @@ Home.propTypes = {
             title: PropTypes.string,
         }),
     }),
+    loading: PropTypes.bool,
 };
 
 export default Home;

@@ -9,9 +9,10 @@ export default {
         return http(fetch(host + '/events'))
     },
     saveEvent: (event) => {
-        const params = Object.keys(event).reduce((s, e, i) => (i === 0 ? e : s + '&' + e), '')
+        //const params = 'eventId='+event.eventId+'&'+'successSum='+event.successSum+'&'+'maxGuestsCount='+event.maxGuestsCount+'&'+'presalePrice='+event.presalePrice+'&'+'salePrice='+event.salePrice+'&'+'fundingDeadline='+event.fundingDeadline+'&'+'eventDate='+event.eventDate;
+        const params = Object.keys(event).reduce((s, e, i) => (i === 0 ? e+'='+event[e].toString() : s + '&' + e+'='+event[e]), '')
         return http(fetch(host + '/event?' + params, {
-            method: 'PUT',
+            //method: 'PUT',
             //body: JSON.stringify(event)
         }))
     },
@@ -21,9 +22,9 @@ export default {
             eventId,
             transactionId
         }
-        const params = Object.keys(request).reduce((s, e, i) => (i === 0 ? e : s + '&' + e), '')
+        const params = Object.keys(request).reduce((s, e, i) => (i === 0 ? e+'='+request[e] : s + '&' + e+'='+request[e]), '')
         return http(fetch(host + '/payment?' + params, {
-            method: 'PUT',
+            //method: 'PUT',
             //body: JSON.stringify({
             //    userId,
             //    eventId,

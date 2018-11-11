@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from '../service/connect';
-import {Avatar, CellButton, Cell, Div, Group, InfoRow, Link, List, ListItem, Panel, PanelHeader, HeaderButton, platform, IOS} from '@vkontakte/vkui';
+import {Avatar, CellButton, Cell, Div, Group, InfoRow, Link, List, ListItem, Panel, PanelHeader, HeaderButton, platform, IOS, Spinner} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import server from '../service/server'
@@ -10,13 +10,25 @@ const osname = platform();
 
 class Event extends React.Component {
 
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            saving: false
+        };
+    }
+
     save = () => {
         const props = this.props;
         connect.makePayment(props.event, data => {
+            this.setState({saving: true})
             server.savePayment(
                 props.fetchedUser.id,
                 props.event.eventId,
-                data.transaction_id)
+                data.result.transaction_id).then(res => {
+                    this.setState({saving: false})
+                    this.props.reload()
+            })
         })
     };
 
@@ -65,7 +77,9 @@ class Event extends React.Component {
                     </List>
                 </Group>
                 <Group>
-                    <CellButton onClick={this.save}>Хочу пойти!</CellButton>
+                    <CellButton onClick={this.save}>
+                        {this.state.saving ? <Spinner/> : "Хочу пойти!"}
+                    </CellButton>
                 </Group>
                 <Group title="Уже идут">
                     {
@@ -89,6 +103,7 @@ Event.propTypes = {
     event: PropTypes.object.isRequired,
     fetchedUser: PropTypes.object.isRequired,
     go: PropTypes.func.isRequired,
+    reload: PropTypes.func.isRequired,
 };
 
 export default Event;

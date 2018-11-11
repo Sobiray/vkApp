@@ -17,12 +17,17 @@ class App extends React.Component {
             fetchedUser: null,
             serverEvents: [],
             events: [],
-            selectedEvent: null
+            selectedEvent: null,
+            loading: true,
         };
     }
 
     componentDidMount () {
+        this.reloadData();
+    }
 
+    reloadData = () => {
+        this.setState({loading: true})
         // Запросим информацию по текущему пользователю
         connect.getUserInfo(data => {
             this.setState({fetchedUser: data});
@@ -38,13 +43,13 @@ class App extends React.Component {
                     const event = this.state.serverEvents.find(e => e.eventId === vkEvent.screen_name);
                     return {group: vkEvent, ...event, guests: []}
                 });
-                this.setState({events});
+                this.setState({events, loading: false});
 
                 // Объединим все массивы пользователей, купивших билеты на мероприятия, и запросим информацию сразу о всех
                 const profileIds = [...new Set(this.state.serverEvents.reduce((s, e) => s.concat(e.guests), []))];
                 connect.getProfilesById(profileIds, data => {
                     const profiles = data.response;
-                    const events1 = this.state.events.map(event => {
+                    const events = this.state.events.map(event => {
                         const serverEvent = this.state.serverEvents.find(serverEvent => serverEvent.eventId === event.eventId);
                         return {
                             ...event,
@@ -52,12 +57,17 @@ class App extends React.Component {
                         }
                     })
                     this.setState({
-                        events: events1
+                        events: events
                     })
+                    if (this.state.selectedEvent) {
+                        this.setState({
+                            selectedEvent: events.find(event => event.eventId === this.state.selectedEvent.eventId)
+                        })
+                    }
                 })
             })
         }).catch(err => {
-            alert('error')
+            this.setState({loading: false});
             alert(err)
             //alert(JSON.stringify(Object.keys(err)))
             //err.text().then(msg => {
@@ -90,9 +100,10 @@ class App extends React.Component {
                     events={state.events}
                     fetchedUser={state.fetchedUser}
                     go={this.go}
-                    goToEvent={this.goToEvent}/>
-                <Event id="event" event={state.selectedEvent} fetchedUser={state.fetchedUser} go={this.go}/>
-                <AddEvent id="addEvent" go={this.go} goHome={this.goHome}/>
+                    goToEvent={this.goToEvent}
+                    loading={this.state.loading}/>
+                <Event id="event" event={state.selectedEvent} fetchedUser={state.fetchedUser} go={this.go} reload={this.reloadData}/>
+                <AddEvent id="addEvent" go={this.go} goHome={this.goHome} reload={this.reloadData}/>
             </View>
         );
     }
