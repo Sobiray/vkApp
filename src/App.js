@@ -96,6 +96,22 @@ class App extends React.Component {
             const event = {group: data.response[0], ...serverEvent, guests: []}
             this.setState({events: [...this.state.events, event],  loading: false});
         });
+    };
+
+    saveGuest = (eventId, txHash) => {
+        connect.getProfilesById([this.state.fetchedUser.id], data => {
+            const events = this.state.events.map(ev => ev.eventId === eventId
+                ? {...ev, guests: [...ev.guests, data.response[0]], guestTxHash: txHash}
+                : ev);
+            this.setState({
+                events: events
+            })
+            if (this.state.selectedEvent) {
+                this.setState({
+                    selectedEvent: events.find(event => event.eventId === this.state.selectedEvent.eventId)
+                })
+            }
+        });
     }
 
     render () {
@@ -110,7 +126,7 @@ class App extends React.Component {
                     goToEvent={this.goToEvent}
                     loading={this.state.loading}/>
                 <Event id="event" event={state.selectedEvent} fetchedUser={state.fetchedUser} go={this.go}
-                       reload={this.reloadData}/>
+                       saveGuest={this.saveGuest}/>
                 <AddEvent id="addEvent" go={this.go} goHome={this.goHome} saveEvent={this.saveEvent}/>
             </View>
         );

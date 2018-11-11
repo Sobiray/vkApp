@@ -34,7 +34,6 @@ class AddEvent extends React.Component {
         this.setState({saving: true})
         server.saveEvent(this.state.event)
             .then(response => {
-                alert(response)
                 this.setState({saving: false})
                 this.props.saveEvent({...this.state.event, txHash: response})
                 this.props.goHome()

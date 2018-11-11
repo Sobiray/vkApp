@@ -42,11 +42,21 @@ class Event extends React.Component {
                 props.fetchedUser.id,
                 props.event.eventId,
                 data.result.transaction_id).then(res => {
-                this.setState({saving: false})
-                this.props.reload()
+                    this.setState({saving: false})
+                    this.props.saveGuest(props.event.eventId, res)
             })
         })
     };
+
+    renderButton = () => {
+        if (this.state.saving) {
+            return <Spinner/>
+        }
+        if (this.props.event.guestTxHash) {
+            return <Link href={'https://rinkeby.etherscan.io/tx/' + this.props.event.guestTxHash}>Транзакция об оплате билета</Link>
+        }
+        return "Хочу пойти!"
+    }
 
     render () {
         const props = this.props;
@@ -102,7 +112,7 @@ class Event extends React.Component {
                 </Group>
                 <Group>
                     <CellButton onClick={this.save}>
-                        {this.state.saving ? <Spinner/> : "Хочу пойти!"}
+                        {this.renderButton()}
                     </CellButton>
                 </Group>
                 {
@@ -131,7 +141,7 @@ Event.propTypes = {
     event: PropTypes.object.isRequired,
     fetchedUser: PropTypes.object.isRequired,
     go: PropTypes.func.isRequired,
-    reload: PropTypes.func.isRequired,
+    saveGuest: PropTypes.func.isRequired,
 };
 
 export default Event;

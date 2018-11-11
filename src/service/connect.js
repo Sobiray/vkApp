@@ -45,7 +45,7 @@ export const connect = {
             app_id: Settings.APP_ID,
             action: "pay-to-group",
             params: {
-                amount: event.salePrice,
+                amount: 1, //event.salePrice,
                 description: 'Оплата билета для ' + event.eventId,
                 group_id: Settings.GROUP_ID
             }
