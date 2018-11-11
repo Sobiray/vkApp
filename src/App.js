@@ -91,6 +91,13 @@ class App extends React.Component {
         this.setState({selectedEvent: event, activePanel: "event"})
     };
 
+    saveEvent = (serverEvent) => {
+        connect.getGroupsById([serverEvent.eventId], data => {
+            const event = {group: data.response[0], ...serverEvent, guests: []}
+            this.setState({events: [...this.state.events, event],  loading: false});
+        });
+    }
+
     render () {
         const state = this.state;
         return (
@@ -102,8 +109,9 @@ class App extends React.Component {
                     go={this.go}
                     goToEvent={this.goToEvent}
                     loading={this.state.loading}/>
-                <Event id="event" event={state.selectedEvent} fetchedUser={state.fetchedUser} go={this.go} reload={this.reloadData}/>
-                <AddEvent id="addEvent" go={this.go} goHome={this.goHome} reload={this.reloadData}/>
+                <Event id="event" event={state.selectedEvent} fetchedUser={state.fetchedUser} go={this.go}
+                       reload={this.reloadData}/>
+                <AddEvent id="addEvent" go={this.go} goHome={this.goHome} saveEvent={this.saveEvent}/>
             </View>
         );
     }

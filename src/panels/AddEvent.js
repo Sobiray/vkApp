@@ -34,8 +34,9 @@ class AddEvent extends React.Component {
         this.setState({saving: true})
         server.saveEvent(this.state.event)
             .then(response => {
+                alert(response)
                 this.setState({saving: false})
-                this.props.reload()
+                this.props.saveEvent({...this.state.event, txHash: response})
                 this.props.goHome()
             })
             .catch(err => {
@@ -127,7 +128,7 @@ AddEvent.propTypes = {
     id: PropTypes.string.isRequired,
     go: PropTypes.func.isRequired,
     goHome: PropTypes.func.isRequired,
-    reload: PropTypes.func.isRequired,
+    saveEvent: PropTypes.func.isRequired,
 };
 
 export default AddEvent;

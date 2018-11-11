@@ -1,7 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from '../service/connect';
-import {Avatar, CellButton, Cell, Div, Group, InfoRow, Link, List, ListItem, Panel, PanelHeader, HeaderButton, platform, IOS, Spinner} from '@vkontakte/vkui';
+import {
+    Avatar,
+    CellButton,
+    Cell,
+    Div,
+    Group,
+    InfoRow,
+    Link,
+    List,
+    ListItem,
+    Panel,
+    PanelHeader,
+    HeaderButton,
+    platform,
+    IOS,
+    Spinner
+} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import server from '../service/server'
@@ -26,13 +42,13 @@ class Event extends React.Component {
                 props.fetchedUser.id,
                 props.event.eventId,
                 data.result.transaction_id).then(res => {
-                    this.setState({saving: false})
-                    this.props.reload()
+                this.setState({saving: false})
+                this.props.reload()
             })
         })
     };
 
-    render() {
+    render () {
         const props = this.props;
         //alert(JSON.stringify(props.event))
         return (
@@ -50,6 +66,14 @@ class Event extends React.Component {
                         description={props.event.group.place && props.event.group.place.title}
                     >{props.event.group.name}</Cell>
                     <Div>{props.event.group.description}</Div>
+                    {
+                        props.event.txHash
+                            ? <Cell>
+                                <Link href={'https://rinkeby.etherscan.io/tx/' + props.event.txHash}>Транзакция в
+                                    смартконтракте</Link>
+                            </Cell>
+                            : null
+                    }
                     <Cell>
                         <Link href={'https://vk.com/' + props.event.group.screen_name}>Перейти к группе</Link>
                     </Cell>
@@ -81,18 +105,22 @@ class Event extends React.Component {
                         {this.state.saving ? <Spinner/> : "Хочу пойти!"}
                     </CellButton>
                 </Group>
-                <Group title="Уже идут">
-                    {
-                        props.event.guests.map(guest => (
-                            <ListItem
-                                before={<Avatar src={guest.photo_50}/>}
-                                description={guest.city && guest.city.title}
-                            >
-                                {`${guest.first_name} ${guest.last_name}`}
-                            </ListItem>
-                        ))
-                    }
-                </Group>
+                {
+                    props.event.guests && props.event.guests.length > 0
+                        ? <Group title="Уже идут">
+                            {
+                                props.event.guests.map(guest => (
+                                    <ListItem
+                                        before={<Avatar src={guest.photo_50}/>}
+                                        description={guest.city && guest.city.title}
+                                    >
+                                        {`${guest.first_name} ${guest.last_name}`}
+                                    </ListItem>
+                                ))
+                            }
+                        </Group>
+                        : null
+                }
             </Panel>
         );
     }
